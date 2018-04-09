@@ -173,11 +173,12 @@ void copiarPtr(char *xs,char *ys){
 
 void concatenar(char *xs, char *ys)
 {
-    int i, j;
-    i=j=0;
+    int i,j;
+    i=0;
+    j=0;
     while(*(xs+i)!='\0')
-        i++;
-    while(*(ys+j)!='\0'){	    
+        i++;	    
+    while(*(ys+j)!='\0'){
 	*(xs+i)=*(ys+j);
 	j++;
 	i++;
@@ -321,13 +322,14 @@ int main(){
 /*  ***************** problema 6*****************************/
     cout<<"**************** problema 6 ***************"<<endl;
     char abba[]="abba";
-    char copia[20];
+    char copia[]="\0";
     copiar(copia,abba);	
     cout<<copia<<endl;
   	
     cout<<"**************** problema 7 ***************"<<endl;	
-    char cadena[20];
-    concatenar(abba,copia);
+    char abc[]="abcd";
+    char cadena[]="\0";
+    concatenar(abba,abc);
     copiar(cadena,abba);
     cout<<cadena<<endl;	
  
