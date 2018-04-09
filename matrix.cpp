@@ -182,7 +182,7 @@ void concatenar(char *xs, char *ys)
 	j++;
 	i++;
     }
-    *(xs+i+j)='\0';	
+    *(xs+i)='\0';	
 }
 
 void concatenarPtr(char *xs, char *ys)
@@ -307,15 +307,15 @@ int main(){
     for(int i=0;i<n;i++)
         cout<<arr[i]<<endl;
 /*  ***************** problema 4 *****************************/
-    /*cout<<"**************** problema 4 ****************"<<endl;
-    Matrix A(2,3);
-    Matrix B(3,2);
-    Matrix C;
+    cout<<"**************** problema 4 ****************"<<endl;
+    Matrix<int> A(2,3);
+    Matrix<int> B(3,2);
+    Matrix<int> C;
     A.inicializar();
     B.inicializar();
     C=A*B;
-    C.imprimir(); */
-
+    //C.imprimir();
+    cout<<C<<endl;
 /*  ***************** problema 5*****************************/
     cout<<"**************** problema 5 ***************"<<endl;
     char name[]="requiem";
