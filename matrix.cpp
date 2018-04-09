@@ -1,6 +1,6 @@
 #include "matrix.h"
 #include<cmath>
-
+#include<string>
 /****************** Trabajo practico 1**********************/
 /****************** problema 1 *****************************/
 
@@ -177,14 +177,21 @@ void concatenar(char *xs, char *ys)
     i=j=0;
     while(*(xs+i)!='\0')
         i++;
-    *(xs+i)=*(ys+j);
+    while(*(ys+j)!='\0'){	    
+	*(xs+i)=*(ys+j);
+	j++;
+	i++;
+    }	
 }
 
 void concatenarPtr(char *xs, char *ys)
 {
     for(;*xs!='\0';xs++)
         ;
-    *xs=*ys;
+    for(;*ys!='\0';ys++){
+	*xs=*ys;
+	xs++;
+    }
 }
 
 /*  ***************** problema 8 *****************************/
@@ -194,13 +201,6 @@ void swapT(T *xs,int i,int j){
     temp=*(xs+i);
     *(xs+i)=*(xs+j);
     *(xs+j)=temp;
-}
-
-template<class T>
-void swapPtr(T *xs,int i,int j){
-    T *temp=(xs+i);
-    (xs+i)=(xs+j);
-    (xs+j)=(xs+i);
 }
 /*  ***************** problema 9 *****************************/
 
@@ -305,23 +305,40 @@ int main(){
     for(int i=0;i<n;i++)
         cout<<arr[i]<<endl;
 /*  ***************** problema 4 *****************************/
-    cout<<"**************** problema 4 ****************"<<endl;
+    /*cout<<"**************** problema 4 ****************"<<endl;
     Matrix A(2,3);
     Matrix B(3,2);
     Matrix C;
     A.inicializar();
     B.inicializar();
     C=A*B;
-    C.imprimir(); 
+    C.imprimir(); */
 
 /*  ***************** problema 5*****************************/
     cout<<"**************** problema 5 ***************"<<endl;
     char name[]="requiem";
     cout<<lenPtr(name)<<endl;
 /*  ***************** problema 6*****************************/
+    cout<<"**************** problema 6 ***************"<<endl;
+    char abba[]="abba";
+    char copia[20];
+    copiar(copia,abba);	
+    cout<<copia<<endl;
+  	
+    cout<<"**************** problema 7 ***************"<<endl;	
+    char cadena[20];
+    concatenar(abba,copia);
+    copiar(cadena,abba);
+    cout<<cadena<<endl;	
+ 
+    cout<<"**************** problema 8 ***************"<<endl;
+    swapT<int> (arr,3,1); 
+    for(int j=0;j<n;j++)
+        cout<<arr[j]<<endl;
 
-
-
+    cout<<"**************** problema 9 ***************"<<endl;
+    cout<<abba<<" "<<palindromo(abba)<<endl;
+    cout<<copia<<" "<<palindromo(copia)<<endl; 
 
 
     cout<<"************** problema 10 ****************"<<endl;
