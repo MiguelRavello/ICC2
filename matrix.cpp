@@ -1,6 +1,5 @@
 #include "matrix.h"
 #include<cmath>
-#include<string>
 /****************** Trabajo practico 1**********************/
 /****************** problema 1 *****************************/
 
@@ -182,7 +181,8 @@ void concatenar(char *xs, char *ys)
 	*(xs+i)=*(ys+j);
 	j++;
 	i++;
-    }	
+    }
+    *(xs+i+j)='\0';	
 }
 
 void concatenarPtr(char *xs, char *ys)
@@ -193,9 +193,11 @@ void concatenarPtr(char *xs, char *ys)
 	*xs=*ys;
 	xs++;
     }
+    *xs='\0';
 }
 
 /*  ***************** problema 8 *****************************/
+
 template<class T>
 void swapT(T *xs,int i,int j){
     T temp;
@@ -208,7 +210,6 @@ void swapT(T *xs,int i,int j){
 bool palindromo(char *xs){
     int i=0;
     int k=lenPtr(xs);
-    cout<<k<<endl;
     int j=k-1;
     while(i < k/2){
         if(*(xs+i)!=*(xs+j)){
@@ -322,27 +323,24 @@ int main(){
 /*  ***************** problema 6*****************************/
     cout<<"**************** problema 6 ***************"<<endl;
     char abba[]="abba";
-    char copia[]="\0";
+    char copia[]=" ";
     copiar(copia,abba);	
     cout<<copia<<endl;
   	
     cout<<"**************** problema 7 ***************"<<endl;	
     char abc[]="abcd";
-    char cadena[]="\0";
-    concatenar(abba,abc);
+    char cadena[]=" ";
+    concatenarPtr(abba,abc);
     copiar(cadena,abba);
     cout<<cadena<<endl;	
- 
+
     cout<<"**************** problema 8 ***************"<<endl;
     swapT<int> (arr,3,1); 
     for(int j=0;j<n;j++)
         cout<<arr[j]<<endl;
-
     cout<<"**************** problema 9 ***************"<<endl;
     cout<<abba<<" "<<palindromo(abba)<<endl;
     cout<<copia<<" "<<palindromo(copia)<<endl; 
-
-
     cout<<"************** problema 10 ****************"<<endl;
     char num_pos[]="123.456e+9";
     char num_neg[]="123.456e-9";
