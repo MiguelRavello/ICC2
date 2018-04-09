@@ -47,6 +47,7 @@ public:
                 		for(int z=0;z<m.m_col;++z){
                     			total += m.m_matrix[i][z] * n.m_matrix[z][j];
                 		}
+				rpta[i][j]=total;
 				total=0;
             		}
         	}
