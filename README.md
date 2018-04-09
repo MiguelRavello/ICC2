@@ -1,8 +1,8 @@
 # ICC2
-laboratorio de icc2
+>laboratorio de icc2
 
-1.git init
-2.git config user.name "someone"
-3.git config user.email "someone@someplace.com"
-4.git add *
-5.git commit -m "some init msg"
++ git init
++ git config user.name "someone"
++ git config user.email "someone@someplace.com"
++ git add *
++ git commit -m "some init msg"
