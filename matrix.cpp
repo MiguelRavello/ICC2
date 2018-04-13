@@ -313,8 +313,12 @@ int main(){
     Matrix<int> C;
     A.inicializar();
     B.inicializar();
+    cout<<"matriz A: "<<endl;
+    cout<<A<<endl;
+    cout<<"matriz B: "<<endl;
+    cout<<B<<endl;
     C=A*B;
-    //C.imprimir();
+    cout<<"matriz C: "<<endl;
     cout<<C<<endl;
 /*  ***************** problema 5*****************************/
     cout<<"**************** problema 5 ***************"<<endl;
