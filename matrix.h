@@ -2,6 +2,7 @@
 #define MATRIX_H
 
 #include<iostream>
+#include<vector>
 using namespace std;
 
 template<class T>
@@ -15,7 +16,7 @@ public:
 	Matrix(int,int);
     Matrix(const Matrix &m);
     ~Matrix(){
-        for(int i=0;i<m_row;i++)        
+        for(int i=0;i<m_row;i++)
             delete[] m_matrix[i];
         delete[] m_matrix;
     }
@@ -31,8 +32,18 @@ public:
     }
     Matrix<T> operator* (const Matrix &o);
     void operator= (const Matrix &o);
+
+    void resizeCol(int size);
+    void insertCol(const T*xs);
     void inicializar();
     void imprimir();
+
+    vector<T> getCol(const int pos);
+    void escalonar();
+    void swapRow(int fila_1,int fila_2);
+    void escalonarPivote();
+    vector<T> sust_regresiva(const T*xs);
+    vector<T> elim_gauss(const T*xs);
 };
 
 template<class T>
@@ -110,5 +121,104 @@ void Matrix<T>::imprimir(){
     cout<<endl;
 }
 
-#endif
+template<class T>
+void Matrix<T>::resizeCol(int nuevo){
+    int minsize=(nuevo>m_col ? m_col : nuevo);
+    for(int i=0;i<m_row;i++){
+        T *xs=new T[nuevo];
+        for(int j=0;j<minsize;j++){
+            xs[j]=m_matrix[i][j];
+        }
+        delete[] m_matrix[i];
+        m_matrix[i]=xs;
+    }
+    m_col=nuevo;
+}
 
+template<class T>
+void Matrix<T>::insertCol(const T*xs){
+    resizeCol(m_col+1);
+    for(int i=0;i<m_row;i++)
+        m_matrix[i][m_col-1]=*(xs+i);
+}
+
+template<class T>
+void Matrix<T>::swapRow(int fila_1,int fila_2){
+    if(fila_1>m_row || fila_2>m_row){
+        cout<<"fila de rango"<<endl;
+    }
+    else{
+        T temp;
+        for(int i=0;i<m_col;i++){
+            temp=m_matrix[fila_1][i];
+            m_matrix[fila_1][i]=m_matrix[fila_2][i];
+            m_matrix[fila_2][i]=temp;
+        }
+    }
+}
+
+template<class T>
+void Matrix<T>::escalonar(){
+    for(int j=0;j<m_row-1;j++){
+        for(int i=j+1;i<m_row;i++){
+            T m=m_matrix[i][j]/m_matrix[j][j];
+            for(int k=0;k<m_col;k++){
+                m_matrix[i][k]-=m*m_matrix[j][k];
+                cout<<m_matrix[i][k]<<" ";
+            }
+            cout<<endl;
+        }
+    }
+}
+
+template<class T>
+void Matrix<T>::escalonarPivote(){
+    for(int j=0;j<m_row-1;j++){
+        T max_val=m_matrix[j][j];
+        int max_file=j;
+        for(int x=j+1;x<m_row;x++){
+            if(max_val<m_matrix[x][j]){
+                max_val=m_matrix[x][j];
+                max_file=x;
+            }
+        }
+        if(j!=max_file)
+            swapRow(j,max_file);
+        for(int i=j+1;i<m_row;i++){
+            T m=m_matrix[i][j]/m_matrix[j][j];
+            for(int k=0;k<m_col;k++){
+                m_matrix[i][k]-=m*m_matrix[j][k];
+            }
+        }
+    }
+}
+
+template<class T>
+vector<T> Matrix<T>::getCol(const int pos){
+    vector<T> xs;
+    for(int i=0;i<m_row;i++)
+        xs.push_back(m_matrix[i][pos]);
+    return xs;
+}
+
+template<class T>
+vector<T> Matrix<T>::sust_regresiva(const T*xs){
+    vector<T> rpta(m_row,0);
+    for(int i=m_row-1;i>=0;i--){
+        T s=0;
+        for(int j=i;j<m_row;j++)
+            s+=m_matrix[i][j]*rpta[j];
+        rpta[i]=(*(xs+i)-s)/m_matrix[i][i];
+    }
+    return rpta;
+}
+
+template<class T>
+vector<T> Matrix<T>::elim_gauss(const T*xs){
+    insertCol(xs);
+    escalonarPivote();
+    vector<T> r=this->sust_regresiva(xs);
+    return r;
+}
+
+#endif
