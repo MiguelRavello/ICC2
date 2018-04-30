@@ -36,6 +36,9 @@ public:
     void resizeCol(int size);
     void insertCol(const T*xs);
     void inicializar();
+    void setMatrix(const vector<vector<T> > xs);
+    void zerox();
+    void identidad();
     void imprimir();
 
     vector<T> getCol(const int pos);
@@ -43,7 +46,7 @@ public:
     void swapRow(int fila_1,int fila_2);
     void escalonarPivote();
     vector<T> sust_regresiva(const T*xs);
-    vector<T> elim_gauss(const T*xs);
+    vector<T> elim_gauss(const T*xs); 
 };
 
 template<class T>
@@ -75,6 +78,34 @@ void Matrix<T>::inicializar(){
             cout << "\nRow " << (i+1) << " Col " << (j+1) << " :";
             cin >> elem; 
             m_matrix[i][j]=elem;
+        }
+    }
+}
+
+template<class T>
+void Matrix<T>::setMatrix(const vector<vector<T> > xs){
+    for(int i=0;i<m_row;i++){
+        for(int j=0;j<m_col;j++)
+            this->m_matrix[i][j]=xs[i][j];
+    }
+}
+
+template<class T>
+void Matrix<T>::zerox(){
+    for(int i=0;i<m_row;i++){
+        for(int j=0;j<m_col;j++)
+            m_matrix[i][j]=0;
+    }
+}
+
+template<class T>
+void Matrix<T>::identidad(){
+    for(int i=0;i<m_row;i++){
+        for(int j=0;j<m_col;j++){
+            if(i==j)
+                m_matrix[i][j]=1;
+            else
+                m_matrix[i][j]=0;
         }
     }
 }

@@ -2,7 +2,11 @@
 
 int main(){
     Matrix<double> A(3,3);
-    A.inicializar();
+    vector<vector<double> > matriz = {{10, -7, 1},
+                                     {7, 1, -11},
+                                     {2, 3, -1}};
+    A.setMatrix(matriz);
+    cout<<"matriz A: "<<endl;
     cout<<A<<endl;
     double arr[]={4,-3,4}; //coeficientes del vector B
     vector<double> rpta;
