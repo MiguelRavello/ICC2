@@ -90,13 +90,15 @@ void Cola<T>::setCola(vector<T> xs){
 template<class T>::pop_head(){
     Nodo<T>* prev, *cur;
     prev=m_head;
-    cur=prev->m_head;
+    cur=m_head->m_next;
     if(prev==NULL){
         ;
     }
     else{
         m_head=cur;
         delete prev;
+        if(m_head==NULL)
+            m_cola=NULL;
     }
 }
 
@@ -111,4 +113,30 @@ template<class T>
 T Cola<T>::top(){
     return m_head->getKey();
 }
+
+template<class T>
+Cola<T> Cola<T>::operator+(const Cola &o){
+    Cola rpta();
+    Nodo<T> *prev, *cur;
+    prev=this->m_head;
+    cur=this->m_head->m_next;
+    while(cur!=NULL){
+        rpta.push(prev->getKey());
+        prev=cur;
+        cur=cur->m_next;
+    }
+    rpta.push(prev->getKey());
+
+    prev=o.m_head;
+    cur=o.m_head->m_next;
+    while(cur!=NULL){
+        rpta.push(prev->getKey());
+        prev=cur;
+        cur=cur->m_next;
+    }
+    rpta.push(prev->getKey());
+    return rpta;
+}
+
+
 #endif
