@@ -11,6 +11,7 @@ private:
     T m_key;
 public:
     Nodo<T> *m_next;
+
     Nodo(const T val=0):m_key(val), m_next(NULL) {}
     Nodo(const Nodo<T> *o):m_key(o->m_key), m_next(o->m_next) {}
     void setKey(const T val) {
@@ -27,7 +28,7 @@ private:
 public:
     Nodo<T> *m_head;
     Nodo<T> *m_cola;
-    Cola():m_head(NULL), m_cola(NULL) {}
+    Cola():m_head(NULL), m_cola(NULL), m_size(0) {}
     Cola(const Cola &m);
     void setCola(vector<T> xs);
     void push(const T);
@@ -40,13 +41,14 @@ public:
             xs=xs->m_next;
         }
         delete xs;
+        return out;
     }
     int getLen(){   return m_size;}
     bool empty();
     T top();
     void xOR(const T); //para la resta
     void sOR(const T); // para la suma
-    
+
     void operator=(const Cola &o);
     Cola<T> operator+(const Cola &o);
     Cola<T> operator-(const Cola &o);
@@ -80,6 +82,7 @@ void Cola<T>::push(const T val){
     if(m_head==NULL){
         m_head=xs;
         m_cola=xs;
+        m_size++;
     }
     else{
         Nodo<T>* prev, *cur;
@@ -91,6 +94,7 @@ void Cola<T>::push(const T val){
         }
         prev->m_next=xs;
         m_cola=xs;
+        m_size++;
         delete cur;
     }
 }
@@ -114,6 +118,8 @@ void Cola<T>::pop_head(){
         delete prev;
         if(m_head==NULL)
             m_cola=NULL;
+        else
+            m_size--;
     }
 }
 
@@ -170,28 +176,40 @@ void Cola<T>::sOR(const T e){
     else
         this->push(e);
 }
-
+ 
 template<class T>
 Cola<T> Cola<T>::operator-(const Cola &o){
-    Cola<T> rpta=*(this);
+    Cola<T> rpta;
     Nodo<T> *xs;
+	xs=this->m_head;
+	while(xs!=NULL){
+		rpta.push(xs->getKey());
+		xs=xs->m_next;
+	}
     xs=o.m_head;
     while(xs!=NULL){
         rpta.xOR(xs->getKey());
         xs=xs->m_next;
     }
+    return rpta;
+
 }
 
 template<class T>
 Cola<T> Cola<T>::operator+(const Cola &o){
-    Cola<T> rpta=*(this);
+    Cola<T> rpta; // No me reconoce el constructor copia Cola<T> r=*this;
     Nodo<T> *xs;
+    xs=this->m_head;
+    while(xs!=NULL){
+        rpta.push(xs->getKey());
+        xs=xs->m_next;
+    }
     xs=o.m_head;
     while(xs!=NULL){
         rpta.sOR(xs->getKey());
         xs=xs->m_next;
     }
+    return rpta;
 }
-
 
 #endif
