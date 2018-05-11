@@ -33,6 +33,7 @@ public:
     int getLen(){   return m_size;}
     bool empty();
     T top();
+    void xOR(const T);
 
     Cola<T> operator+(const Cola &o);
     Cola<T> operator-(const Cola &o);
@@ -115,6 +116,46 @@ T Cola<T>::top(){
 }
 
 template<class T>
+void Cola<T>::xOR(const T e){
+    Nodo<T> *prev, *cur, *victima;
+    prev=this->m_head;
+    cur=this->m_head->m_next;
+    bool v=false;
+    if(prev->getKey()==e){
+        m_head=cur;
+        delete prev;
+    }
+    else{
+        while(cur!=NULL){
+            if(cur->getKey()==e){
+                prev->m_next=cur->m_next;
+                victima=cur;
+                delete victima;
+                v=true;
+                break;
+            }
+            prev=cur;
+            cur=cur->m_next;
+        }
+        if(v)
+            ;
+        else
+            this->push(e);
+    }
+}
+
+template<class T>
+Cola<T> Cola<T>::operator-(const Cola &o){
+    Cola rpta(*this);
+    Nodo<T> *xs;
+    xs=o.m_head;
+    while(xs!=NULL){
+        rpta.xOR(xs->getKey());
+        xs=xs->m_next;
+    }
+}
+
+template<class T>
 Cola<T> Cola<T>::operator+(const Cola &o){
     Cola rpta();
     Nodo<T> *prev, *cur;
@@ -137,6 +178,7 @@ Cola<T> Cola<T>::operator+(const Cola &o){
     rpta.push(prev->getKey());
     return rpta;
 }
+
 
 
 #endif
