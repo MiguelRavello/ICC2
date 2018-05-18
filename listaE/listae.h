@@ -10,9 +10,9 @@ template<class T>
 class Nodo{
 private:
     T m_key;
-public:
     Nodo<T> *m_next;
-
+    template<class U> friend class ListaE;
+public:
     Nodo(const T val=0):m_key(val), m_next(NULL) {}
     Nodo(const Nodo<T> *o):m_key(o->m_key), m_next(o->m_next) {}
     void setKey(const T val) {
@@ -41,7 +41,8 @@ public:
     Nodo<T>* getNodo(const int);
     int getLen() const{   return m_size;}
 
-    friend ostream& operator<<(ostream& out,const ListaE<T> &o){
+    void imprimir();
+    /*friend ostream& operator<<(ostream& out,const ListaE &o){
 	    Nodo<T> *xs;
         xs=o.m_inicio;
         while(xs!=NULL){
@@ -50,8 +51,19 @@ public:
         }
         delete xs;
         return out;
-    }
+    }*/
 };
+
+template<class T>
+void ListaE<T>::imprimir(){
+    Nodo<T> *xs;
+    xs=m_inicio;
+    while(xs!=NULL){
+        cout<<xs->getKey()<<"->";
+        xs=xs->m_next;
+    }
+    delete xs;
+}
 
 template<class T>
 void ListaE<T>::setLista(const vector<T> xs){
