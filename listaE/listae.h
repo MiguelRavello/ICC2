@@ -38,7 +38,7 @@ public:
 
     Nodo<T>* getHead() const{ return m_inicio;}
     Nodo<T>* getCola() const{ return m_fin;}
-    Nodo<T>* getNodo(const int) const;
+    Nodo<T>* getNodo(const int);
     int getLen() const{   return m_size;}
 
     friend ostream& operator<<(ostream& out,const ListaE<T> &o){
@@ -99,7 +99,7 @@ void ListaE<T>::insertar(const T val,const int pos){
 }
 
 template<class T>
-Nodo<T>* ListaE<T>::getNodo(const int pos) const{
+Nodo<T>* ListaE<T>::getNodo(const int pos){
     if(pos>=0 && pos<m_size){
         Nodo<T> *xs;
         xs=m_inicio;
@@ -109,6 +109,7 @@ Nodo<T>* ListaE<T>::getNodo(const int pos) const{
                 break;
             }
             xs=xs->m_next;
+            i++;
         }
         return xs;
     }

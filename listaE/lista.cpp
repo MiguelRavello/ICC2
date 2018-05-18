@@ -9,16 +9,24 @@ int main(){
     B.setLista(b);
     cout<<"lista B"<<endl;
     cout<<B<<endl;
+    cout<<"insertando 5 en la posicion 5"<<endl;
     B.insertar(5,5);
     cout<<B<<endl;
     cout<<"lista A"<<endl;
     cout<<A<<endl;
+    cout<<"borrando el nodo-posicion 2"<<endl;
     A.pop_nodo(2);
     cout<<A<<endl;
+    cout<<"borrando las cabezas"<<endl;
     A.pop_inicio();
     cout<<A<<endl;
     A.pop_inicio();
     cout<<A<<endl;
-
+    cout<<"tamaño de A"<<endl;
+    cout<<A.getLen()<<endl;
+    cout<<"Nodo pos 2"<<endl;
+    Nodo<int> *xs;
+    xs=A.getNodo(2);
+    cout<<xs->getKey()<<endl;
     return 0;
 }
