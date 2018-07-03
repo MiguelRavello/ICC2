@@ -1,0 +1,266 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{color}
+
+\definecolor{gray97}{gray}{.97}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.45}
+\lstset{ frame=Ltb,
+     framerule=0pt,
+     aboveskip=0.5cm,
+     framextopmargin=3pt,
+     framexbottommargin=3pt,
+     framexleftmargin=0.4cm,
+     framesep=0pt,
+     rulesep=.4pt,
+     backgroundcolor=\color{gray97},
+     rulesepcolor=\color{black},
+     %
+     stringstyle=\ttfamily,
+     showstringspaces = false,
+     basicstyle=\small\ttfamily,
+     commentstyle=\color{gray45},
+     keywordstyle=\bfseries,
+     %
+     numbers=left,
+     numbersep=15pt,
+     numberstyle=\tiny,
+     numberfirstline = false,
+     breaklines=true,
+   }
+
+% minimizar fragmentado de listados
+\lstnewenvironment{listing}[1][]
+   {\lstset{#1}\pagebreak[0]}{\pagebreak[0]}
+
+\lstdefinestyle{consola}
+   {basicstyle=\scriptsize\bf\ttfamily,
+    backgroundcolor=\color{gray75},
+    }
+\lstdefinestyle{C}
+   {language=C,
+   }
+%\hyperlinking
+%opening
+\title{Chain of Resposibility}
+\author{por Juan Miguel Ravelo Jove}
+
+\begin{document}
+
+\maketitle
+
+\paragraph{Palabras clave:} 
+\begin{itemize}
+ \item Solicitud.
+ \item Manejadores.
+ \item Lista enlazada.
+ \item Cliente.
+ \item Cajero autom\'atico.
+\end{itemize}
+
+\section{Definici\'on del patr\'on}
+Una forma de pasar una solicitud entre una cadena de objetos.
+
+\section{Explicaci\'on}
+\subsection{Intensi\'on}
+\begin{itemize}
+ \item Evita el emisor de una solicitud a su receptor, dando a mas de un objeto una oportunidad de manejar la solicitud. Encadena los objetos receptores y pasa la solicitud a lo largo de la cadena hasta que un objeto lo maneje.
+ \item Solicitudes de \textbf{Launch and leave} con un \textbf{unico canal} de procesamiento que contiene muchos \textbf{manejadores}.
+ \item Una \textbf{Lista enlazada} orientada a objetos con recorrido recursivo.
+\end{itemize}
+
+\subsection{Problema}
+\begin{itemize}
+ \item Hay un n\'umero posible de \textbf{manejadores} o \emph{elementos de procesamiento} o \emph{nodos} y una secuencia de solicitudes a ser manejadas.
+ \item Necesidad de procesar solicitudes de manera eficiente sin tener en cuenta las relaciones y prioridades del manejador, ni las solicitudes asignadas al manejador.
+\end{itemize}
+
+\subsection{An\'alisis y discuciones}
+Encapsular los elementos de procesamiento dentro de una abstracci\'on de \textbf{\emph{canalizaci\'on}} y hacer que los clientes \textbf{launch and leave} sus solicitudes a la entrada de la \textbf{pipeline}. \\
+%imagen del patron de diseno
+\begin{figure}[!h]
+ \centering
+ \includegraphics[scale=0.7]{./imag1.png}
+ % imag1.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{Encapsulamiento en una pipeline}
+ \label{fig:1}
+\end{figure}
+
+El patr\'on encadena los objetos entre si, y luego pasa los mensajes de solicitud de un objeto a otro hasta que alcanza un objeto capaz de manejar el mensaje. La cantidad y el tipo de objetos del manejador no se conocen a priori, se pueden configurar din\'amicamente. El mecanismo de encadenamiento utiliza una composici\'on recursiva para permitir un \textbf{n\'umero ilimitado} de manejadores a \textbf{vincular}. \\
+
+Chain of resposibility simplifica las interconexiones de objetos. En lugar de remitentes y receptores que mantienen referencias a todos los receptores candidatos, \textbf{\emph{cada emisor guarda una sola referencia a su sucesor inmediato en la cadena}}. \\
+
+Aseg\'urese de que exista una \textbf{red de seguridad para atrapar} a cualquier solicitud que no se haya manejado.
+\paragraph{Cuidado}
+No use Chain of resposibility cuando cada solicitud solo sea manejada por un solo manejador, o cuando el objeto del cliente sepa que objeto servicio debe manejar la solicitud.
+
+\subsection{Casos donde usar}
+\'Usese el patr\'on Chain of responsibility cuando:
+\begin{itemize}
+ \item Hay m\'as de un objeto que pueda manejar la solicitud y el manejador no se conoce a priori, sino que deber\'ia determinarse autom\'aticamente.
+ \item Se quiere enviar una solicitud a un objeto entre varios, sin especificar explicitamente el receptor.
+ \item El conjunto de objetos que pueden manejar una solicitud deberia ser especificado din\'amicamente.
+\end{itemize}
+
+\subsection{Estructura}
+\begin{itemize}
+ \item Las clases derivadas saben como satisfacer las solicitudes de los clientes.
+ \item Si el objeto \textbf{actual} no esta disponible, o no es suficiente, se delega en la clase base, que delega en el objeto \textbf{siguiente}, y continuan las operaciones.
+ \item Multiples manejadores podrian contribuir al manejo de cada solicitud.
+ \item La solicitud puede transmitirse a lo largo de toda la cadena, teniendo cuidado que el ultimo enlace, un \textbf{NULL siguiente}. 
+\end{itemize}
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[scale=0.7]{./imag2.png}
+ % imag2.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{Estructura}
+ \label{fig:2}
+\end{figure}
+
+
+\section{Ejemplo de un cajero autom\'atico}
+\paragraph{Header}
+\begin{lstlisting}[language=C++]
+#ifndef CAJERO_H
+#define CAJERO_H
+
+#include<iostream>
+using namespace std;
+
+class Cajero{
+protected:
+    Cajero *m_next;
+public:
+    Cajero():m_next(NULL){}
+    virtual void devuelveBilletes(int valor)=0;
+    void setNext(Cajero *siguiente){    m_next=siguiente;}
+};
+
+class Billete50 : public Cajero{
+public:
+    void devuelveBilletes(int valor){
+        if(valor%5==0 || valor%10==0){
+            int resto = valor%50;
+            int nbilletes = valor/50;
+            if(nbilletes>0)
+                cout<<nbilletes<<" x50 soles"<<endl;
+            if(resto>0){
+                if(m_next!=NULL)
+                    m_next->devuelveBilletes(resto);
+                else
+                    cout<<"soy el ultimo handler"<<endl;
+            }
+        }
+        else
+            throw "valor no valido";
+    }
+};
+
+class Billete20 : public Cajero{
+public:
+    void devuelveBilletes(int valor){
+        int resto = valor%20;
+        int nbilletes = valor/20;
+        if(nbilletes>0)
+            cout<<nbilletes<<" x20 soles"<<endl;
+        if(resto>0){
+            if(m_next!=NULL)
+                m_next->devuelveBilletes(resto);
+            else
+                cout<<"soy el ultimo handler"<<endl;
+        }
+    }
+};
+
+class Billete10 : public Cajero{
+public:
+    void devuelveBilletes(int valor){
+        int resto = valor%10;
+        int nbilletes = valor/10;
+        if(nbilletes>0)
+            cout<<nbilletes<<" x10 soles"<<endl;
+        if(resto>0){
+            if(m_next!=NULL)
+                m_next->devuelveBilletes(resto);
+            else
+                cout<<"soy el ultimo handler"<<endl;
+        }
+    }
+};
+
+class Billete5 : public Cajero{
+public:
+    void devuelveBilletes(int valor){
+        int resto = valor%5;
+        int nbilletes = valor/5;
+        if(nbilletes>0)
+            cout<<nbilletes<<" x5 soles"<<endl;
+        if(resto>0){
+            if(m_next!=NULL)
+                m_next->devuelveBilletes(resto);
+            else
+                cout<<"soy el ultimo handler"<<endl;
+        }
+    }
+};
+
+#endif
+\end{lstlisting}
+
+\paragraph{Main}
+\begin{lstlisting}[language=C++]
+ #include"cajero.h"
+
+int main(){
+    Cajero *b50 = new Billete50();
+    Cajero *b20 = new Billete20();
+    Cajero *b10 = new Billete10();
+    Cajero *b5  = new Billete5();
+//  Cajero *b5 = NULL;  // el ultimo handler
+
+//  Enlazando los handlers
+    b50->setNext(b20);
+    b20->setNext(b10);
+    b10->setNext(b5);
+
+//  Red de seguridad contra numeros no multiplos de 5
+    try{
+        b50->devuelveBilletes(23); // set la solicitud
+    } catch(const char* msg){
+        cerr << msg << endl;
+    }
+
+    delete b50;
+    delete b20;
+    delete b10;
+    delete b5;
+
+    return 0;
+}
+\end{lstlisting}
+
+\section{Conclusiones}
+\begin{enumerate}
+ \item Reduce el acoplamiento.
+ \begin{itemize}
+  \item El patr\'on libera a un objeto de tener que saber que otro objeto maneja la solicitud.
+  \item El receptor (manejador) no conoce al emisor.
+  \item El objeto (manejador) no conoce la estructura de la cadena (pipeline).
+  \item Simplifica las interconexiones entre objetos, en vez que los objetos mantengan referencia a posibles receptores solo refiere al siguiente.
+ \end{itemize}
+ \item A\~nade flexibilidad para asignar resposabilidad a objetos.
+ \item No se garantiza la recepci\'on, dado que las solicitudes no tienen un receptor explicito.
+\end{enumerate}
+
+\section{Referencias}
+\begin{itemize}
+ \item \texttt{https://sourcemaking.com/design\_patterns/chain\_of\_responsibility/cpp/1}
+ \item \texttt{http://www.coderslexicon.com/chain-of-responsibility-pattern-c/}
+ \item Alexander Shvets, Design Patterns Explained Simply (2013).
+ \item Erich Gamma, Patrones de Dise\~no 1ra edici\'on (2003).
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,250 @@
+\documentclass[xcolor=dvipsnames]{beamer}
+
+\usetheme{Antibes}
+\usecolortheme[named=Maroon]{structure}
+\usepackage[utf8]{inputenc}
+\usepackage{default}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{gray97}{gray}{.97}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.45}
+\lstset{ frame=Ltb,
+     framerule=0pt,
+     aboveskip=0.5cm,
+     framextopmargin=3pt,
+     framexbottommargin=3pt,
+     framexleftmargin=0.4cm,
+     framesep=0pt,
+     rulesep=.4pt,
+     backgroundcolor=\color{gray97},
+     rulesepcolor=\color{black},
+     %
+     stringstyle=\ttfamily,
+     showstringspaces = false,
+     basicstyle=\small\ttfamily,
+     commentstyle=\color{gray45},
+     keywordstyle=\bfseries,
+     %
+     numbers=left,
+     numbersep=15pt,
+     numberstyle=\tiny,
+     numberfirstline = false,
+     breaklines=true,
+   }
+
+% minimizar fragmentado de listados
+\lstnewenvironment{listing}[1][]
+   {\lstset{#1}\pagebreak[0]}{\pagebreak[0]}
+
+\lstdefinestyle{consola}
+   {basicstyle=\scriptsize\bf\ttfamily,
+    backgroundcolor=\color{gray75},
+    }
+\lstdefinestyle{C}
+   {language=C,
+   }
+
+\title{Chain of Resposibility}
+\author{por Ravelo Jove Juan Miguel}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+ \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Índice}
+\tableofcontents[pausesections]
+
+\end{frame}
+
+\section{Definici\'on}
+\begin{frame}
+ \frametitle{Definici\'on}
+ Una forma de pasar una solicitud entre una cadena de objetos.
+  \begin{itemize}
+ \item Solicitud.
+ \item Manejadores.
+ \item Lista enlazada.
+ \item Cliente.
+ \item Cajero autom\'atico.
+  \end{itemize}
+\end{frame}
+
+\section{Intensi\'on}
+\begin{frame}
+ \frametitle{Intensi\'on}
+\begin{itemize}
+ \item Evita el emisor de una solicitud a su receptor, dando a mas de un objeto una oportunidad de manejar la solicitud. Encadena los objetos receptores y pasa la solicitud a lo largo de la cadena hasta que un objeto lo maneje.
+ \item Solicitudes de \textbf{Launch and leave} con un \textbf{unico canal} de procesamiento que contiene muchos \textbf{manejadores}.
+ \item Una \textbf{Lista enlazada} orientada a objetos con recorrido recursivo.
+\end{itemize}
+\end{frame}
+
+\section{Problema}
+\begin{frame}
+  \frametitle{Problema}
+\begin{itemize}
+ \item Hay un n\'umero posible de \textbf{manejadores} o \emph{elementos de procesamiento} o \emph{nodos} y una secuencia de solicitudes a ser manejadas.
+ \item Necesidad de procesar solicitudes de manera eficiente sin tener en cuenta las relaciones y prioridades del manejador, ni las solicitudes asignadas al manejador.
+\end{itemize}
+\end{frame}
+
+\section{Encapsulamiento}
+\begin{frame}
+ \frametitle{Encapsulamiento}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.7]{./imag1.png}
+ % imag1.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \label{fig:1}
+\end{figure}
+\end{frame}
+
+\section{Estructura}
+\begin{frame}
+ \frametitle{Estructura}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.7]{./imag2.png}
+ % imag2.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \label{fig:2}
+\end{figure}
+
+\end{frame}
+
+
+\section{Cajero}
+\begin{frame}[fragile]
+ \frametitle{Header}
+ \begin{lstlisting}[language=C++]
+#ifndef CAJERO_H
+#define CAJERO_H
+
+#include<iostream>
+using namespace std;
+
+class Cajero{
+protected:
+    Cajero *m_next;
+public:
+    Cajero():m_next(NULL){}
+    virtual void devuelveBilletes(int valor)=0;
+    void setNext(Cajero *siguiente){    m_next=siguiente;}
+};
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+ \frametitle{Header}
+ \begin{lstlisting}[language=C++]
+class Billete50 : public Cajero{
+public:
+void devuelveBilletes(int valor){
+  if(valor%5==0 || valor%10==0){
+    int resto = valor%50;
+    int nbilletes = valor/50;
+    if(nbilletes>0)
+      cout<<nbilletes<<" x50 soles"<<endl;      
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+ \frametitle{Header}
+ \begin{lstlisting}[language=C++]
+    if(resto>0){
+      if(m_next!=NULL)
+	m_next->devuelveBilletes(resto);
+      else
+	cout<<"soy el ultimo handler"<<endl;
+    }
+  }
+  else
+    throw "valor no valido";
+}
+};
+ \end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]
+ \frametitle{Header}
+ \begin{lstlisting}[language=C++]
+class Billete20 : public Cajero{
+public:
+    void devuelveBilletes(int valor){
+        int resto = valor%20;
+        int nbilletes = valor/20;
+        if(nbilletes>0)
+            cout<<nbilletes<<" x20 soles"<<endl;
+        if(resto>0){
+            if(m_next!=NULL)
+                m_next->devuelveBilletes(resto);
+            else
+                cout<<"soy el ultimo handler"<<endl;
+        }
+    }
+};
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+ \frametitle{Main}
+ \begin{lstlisting}[language=C++]
+#include"cajero.h"
+int main(){
+    Cajero *b50 = new Billete50();
+    Cajero *b20 = new Billete20();
+    Cajero *b10 = new Billete10();
+    Cajero *b5  = new Billete5();
+//  Enlazando los handlers
+    b50->setNext(b20);
+    b20->setNext(b10);
+    b10->setNext(b5);
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+ \frametitle{Main}
+ \begin{lstlisting}[language=C++]
+//  Red de seguridad contra numeros no multiplos de 5
+    try{
+        b50->devuelveBilletes(23); // set la solicitud
+    } catch(const char* msg){
+        cerr << msg << endl;
+    }
+    delete b50;
+    delete b20;
+    delete b10;
+    delete b5;
+    return 0;
+}
+  \end{lstlisting}
+\end{frame}
+
+\section{Conclusiones}
+\begin{frame}
+ \frametitle{Conclusiones}
+  Reduce el acoplamiento.
+ \begin{itemize}
+  \item El patr\'on libera a un objeto de tener que saber que otro objeto maneja la solicitud.
+  \item El receptor (manejador) no conoce al emisor.
+  \item El objeto (manejador) no conoce la estructura de la cadena (pipeline).
+  \item Simplifica las interconexiones entre objetos, en vez que los objetos mantengan referencia a posibles receptores solo refiere al siguiente.
+ \end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Conclusiones}
+ A\~nade flexibilidad para asignar resposabilidad a objetos. \\
+ 
+ No se garantiza la recepci\'on, dado que las solicitudes no tienen un receptor explicito.
+\end{frame}
+
+
+\end{document}
