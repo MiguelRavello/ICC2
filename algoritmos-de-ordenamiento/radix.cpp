@@ -1,3 +1,6 @@
+//Fuente en C: 
+//http://es.wikipedia.org/wiki/Ordenamiento_Radix
+//Modificado a C++ : sAfOrAs
 #include<iostream>
 using namespace std;
 #include <math.h>
