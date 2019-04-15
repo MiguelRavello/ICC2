@@ -5,12 +5,20 @@
 using namespace std;
 
 /* problema 3.1 */
+/* Se declara el prototipo de la funcion, para informar al compilador
+ * que existe, y luego definir el cuerpo de la funcion en cualquier lugar */
 void printNum(int);
 
 /* problema 3.2 */
+/* void printNum() { std::cout << number; };
+ * agregandole int n, para el argumento */
 void printN2(int n){cout<<n<<endl;}; //con o sin ; tmb funciona
+/* Una segunda forma es con la variable global*/
+int N=8081;
+void printNglobal(){cout<<N<<endl;}
 
 /* problema 3.3 */
+/* Necesita el paso por referencia */
 void dobleN(int &n){n*=2;}
 
 /* problema 3.4 */
@@ -27,17 +35,20 @@ int sum(const int x,const int y,const int z){ ///falto agregar un tercer element
 const int ARRAY_LEN = 10;
 
 /* problema 4.1 */
+/* suma de dos enteros y dos doubles*/
 template<class T>
 T suma(T x,T y){
     return x+y;
 }
 
 /* problema 4.3 y 4.4*/
+/* suma de dos a cuatro enteros */
 int suma4(int a,int b,int c=0,int d=0){
     return a+b+c+d;
 }
 
 /* problema 4.5 */
+/* suma de los elementos del arreglo */
 int sumArr(int *xs,int len){
     int r=0;
     for(int i=0;i<len;i++){
@@ -47,6 +58,7 @@ int sumArr(int *xs,int len){
 }
 
 /* problema 4.6 */
+/* Suma de elementos del arreglo en modo recursivo */
 int sumaRec(int *xs, int len){
     if(len==0)
         return 0;
@@ -68,6 +80,7 @@ int dart(const int n){
 double computePi(int (*f)(const int),const int n){
     srand(time(0));
     int dardo=f(n);
+    cout<<dardo<<endl;
     return dardo/static_cast<double>(n)*4;
 }
 
@@ -81,6 +94,7 @@ void imprimir(int *xs,const int n){
 }
 
 /* problema 6.2 */
+/* invierte el arreglo; recorriendo el arreglo como el palindromo */
 void reversa(int *xs,const int n){
     for(int i=0;i<n/2;i++){
         int temp=xs[i];
@@ -147,7 +161,8 @@ int main(){
     cout<<" ****** problema 3.2  ***** "<<endl;
     int n=35;
     printN2(n);
-
+    cout<<"con variable global"<<endl;
+    printNglobal();
     cout<<" ****** problema 3.3  ***** "<<endl;
     dobleN(n);
     cout<<n<<endl;
@@ -160,6 +175,10 @@ int main(){
 
     cout<<" ****** problema 3.6  ***** "<<endl;
     int arr[ARRAY_LEN] = {10};
+    /* inicializa el arreglo al arr[0]=10 y el resto con 0*/
+    //int tam=sizeof(arr)/sizeof(arr[0]);
+    //for(int i=0;i<tam;i++)
+    //    cout<<arr[i]<<endl;
     int *xptr=arr;
     int *yptr=arr + ARRAY_LEN - 1; //falto agregar * a yptr
     cout<<*xptr<<" "<<*yptr<<endl;
@@ -170,15 +189,16 @@ int main(){
     cout<<" ****** problema 4.2  ***** "<<endl;
     cout<<"en suma(1, 1.0)es error sintaxis dado q no son del mismo tipo a menos q sean casteados"<<endl;
 
-//    cout<<" ****** problema 5.1  ***** "<<endl;
+    cout<<" ****** problema 5.1  ***** "<<endl;
+    /* valores aleatorios entre 0 y 1 */
     double x=rand()/(double)(RAND_MAX);
     double y=rand()/(double)(RAND_MAX);
-
+    cout<<x<<"\n"<<y<<endl;
     cout<<"************* problema 5.3 *******"<<endl;
     double pi=computePi(dart,5000000);
     cout<<"pi: "<<pi<<endl;
     cout<<"problema 7.5"<<endl;
-    string temporal = " Never odd or even ";
+    string temporal = "Never odd or even";
     char *oddOrEven=&temporal[0];
     char *abc=&oddOrEven[5];
     abc -=2;
