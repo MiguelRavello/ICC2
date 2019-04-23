@@ -9,8 +9,11 @@ int main(){
     cout<<"y el punto  mypoint es constante, por lo q no se puede modificar"<<endl;
 
     cout<<"*********** problema 2.2  ***************"<<endl;
-    cout<<"en la linea 11 la funcion, el seteo es declarado constante"<<endl;
-
+    cout<<"en la linea 11 la funcion, el seteo es declarado constante, pero pretende hacer una asignacion"<<endl;
+    /*The idea of const functions is not allow them to modify the object on which they are called. 
+    It is recommended practice to make as many functions const as possible so that accidental 
+    changes to objects are avoided.
+    int getValue() const {return value;}*/
     cout<<"*********** problema 2.3  ***************"<<endl;
     cout<<"En la linea 16 el objeto p, esta llamando a sus miembros dato siendo privados"<<endl;
 
