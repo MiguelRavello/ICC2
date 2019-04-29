@@ -57,12 +57,14 @@ public:
     rectangulo(const punto &p1,const punto &p2);
     rectangulo(const int a,const int b,const int c, const int d);
     double area() const;
+    int getNumLados() const{return 44;}
 };
 
 class triangulo : public poligono{
 public:
     triangulo(const punto &p1,const punto &p2,const punto&p3);
     double area() const;
+    int getNumLados() const{return 33;}
 };
 
 #endif

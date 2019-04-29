@@ -166,6 +166,12 @@ int main(){
     print(&r);
     cout<<"triangulo"<<endl;
     print(&t);
+    poligono *p1=&r;
+    poligono *p2=&t;
+    cout<<"pregunta 5.6.4"<<endl;
+    cout<<"getNumLados usa de poligonos pq no es una funcion virtual"<<endl;
+    cout<<p1->getNumLados()<<endl;
+    cout<<t.poligono::getNumLados()<<endl;
     return 0;
 }
 
