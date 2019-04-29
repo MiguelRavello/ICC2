@@ -46,6 +46,7 @@ public:
     poligono(const puntoArr &xs);
     poligono(const punto puntos[],const int len);
     virtual double area() const=0;
+    void soy(){cout<<"soy un poligono"<<endl;}
     static int getNP(){return m_np;}
     int getNumLados() const {return m_lista.getSize();}
     const puntoArr *getpuntos() const {return &m_lista;}
@@ -57,6 +58,7 @@ public:
     rectangulo(const punto &p1,const punto &p2);
     rectangulo(const int a,const int b,const int c, const int d);
     double area() const;
+    void soy(){cout<<"soy rectangulo"<<endl;}
     int getNumLados() const{return 44;}
 };
 
@@ -64,6 +66,7 @@ class triangulo : public poligono{
 public:
     triangulo(const punto &p1,const punto &p2,const punto&p3);
     double area() const;
+    void soy(){cout<<"soy triangulo"<<endl;}
     int getNumLados() const{return 33;}
 };
 

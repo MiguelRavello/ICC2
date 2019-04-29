@@ -154,7 +154,7 @@ void print(poligono *p) {
         cout << "(" << pa ->get(i) ->getX() << ", " << pa ->get(i) -> getY() << ")"<<endl;
     }
 }
-
+/* 
 int main(){
     punto a(2,2);
     punto b(-1,-1);
@@ -175,4 +175,4 @@ int main(){
     return 0;
 }
 
-
+*/
