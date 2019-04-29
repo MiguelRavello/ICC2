@@ -2,6 +2,7 @@
 #define GEOMETRIA_H
 
 #include<iostream>
+#include<cmath>
 
 using namespace std;
 
@@ -39,7 +40,7 @@ public:
 
 class poligono{
 protected:
-    static int m_np;
+    static int m_np;  /* contador de poligonos instanciados */
     puntoArr m_lista;
 public:
     poligono(const puntoArr &xs);
@@ -49,6 +50,19 @@ public:
     int getNumLados() const {return m_lista.getSize();}
     const puntoArr *getpuntos() const {return &m_lista;}
     ~poligono() {--m_np;}
+};
+
+class rectangulo : public poligono{
+public:
+    rectangulo(const punto &p1,const punto &p2);
+    rectangulo(const int a,const int b,const int c, const int d);
+    double area() const;
+};
+
+class triangulo : public poligono{
+public:
+    triangulo(const punto &p1,const punto &p2,const punto&p3);
+    double area() const;
 };
 
 #endif
